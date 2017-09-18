@@ -100,9 +100,9 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         TextView dojTextView = holder.dojTextView;
         Employee employee =  mDataSource.get(position);
         nameTextView.setText(employee.getEmployeeName());
-        ageTextView.setText(String.valueOf(employee.getEmployeeAge()));
-        dobTextView.setText(employee.getEmployeeDOB());
-        dojTextView.setText(employee.getEmployeeDOJ());
+        ageTextView.setText(String.format("Age: %1$s", employee.getEmployeeAge()));
+        dobTextView.setText(String.format("DoB: %1$s", employee.getEmployeeDOB()));
+        dojTextView.setText(String.format("DoJ: %1$s", employee.getEmployeeDOJ()));
     }
 
     @Override
