@@ -178,7 +178,6 @@
         android:layout_marginLeft="8dp"
         android:background="@drawable/ic_perm_contact_calendar_black_24dp"
         android:onClick="datePicker"
-        android:text="Button"
         app:layout_constraintBottom_toBottomOf="@+id/edit_emp_dob"
         app:layout_constraintLeft_toRightOf="@+id/edit_emp_dob" />
 
@@ -190,7 +189,6 @@
         android:layout_marginLeft="8dp"
         android:background="@drawable/ic_perm_contact_calendar_black_24dp"
         android:onClick="datePicker"
-        android:text="Button"
         app:layout_constraintBottom_toBottomOf="@+id/edit_emp_doj"
         app:layout_constraintLeft_toRightOf="@+id/edit_emp_doj" />
 

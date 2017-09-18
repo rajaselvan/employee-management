@@ -179,7 +179,6 @@
         android:layout_marginLeft="8dp"
         android:background="@drawable/ic_perm_contact_calendar_black_24dp"
         android:onClick="datePicker"
-        android:text="Button"
         app:layout_constraintBottom_toBottomOf="@+id/new_emp_dob"
         app:layout_constraintLeft_toRightOf="@+id/new_emp_dob"
         tools:layout_editor_absoluteY="288dp" />
@@ -193,7 +192,6 @@
         android:layout_marginTop="0dp"
         android:background="@drawable/ic_perm_contact_calendar_black_24dp"
         android:onClick="datePicker"
-        android:text="Button"
         app:layout_constraintBottom_toBottomOf="@+id/new_emp_doj"
         app:layout_constraintLeft_toRightOf="@+id/new_emp_doj"
         app:layout_constraintTop_toTopOf="@+id/new_emp_doj"

@@ -1,7 +1,9 @@
 package adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-public class EmployeeListAdapter extends BaseAdapter {
+public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapter.ViewHolder> {
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -30,69 +32,6 @@ public class EmployeeListAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         cursorToArrayList();
     }
-
-
-    @Override
-    public int getCount() {
-        return mDataSource.size();
-    }
-
-
-    @Override
-    public Object getItem(int position) {
-        return mDataSource.get(position);
-    }
-
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if (convertView == null) {
-
-            convertView = mInflater.inflate(R.layout.custom_row_layout, parent, false);
-
-            holder = new ViewHolder();
-            holder.nameTextView = (TextView) convertView.findViewById(R.id.display_emp_name);
-            holder.ageTextView = (TextView) convertView.findViewById(R.id.display_emp_age);
-            holder.dobTextView = (TextView) convertView.findViewById(R.id.display_emp_dob);
-            holder.dojTextView = (TextView) convertView.findViewById(R.id.display_emp_doj);
-
-            convertView.setTag(holder);
-
-        } else {
-
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        TextView nameTextView = holder.nameTextView;
-        TextView ageTextView = holder.ageTextView;
-        TextView dobTextView = holder.dobTextView;
-        TextView dojTextView = holder.dojTextView;
-
-        Employee employee = (Employee) getItem(position);
-
-        nameTextView.setText(employee.getEmployeeName());
-        ageTextView.setText(String.valueOf(employee.getEmployeeAge()));
-        dobTextView.setText(employee.getEmployeeDOB());
-        dojTextView.setText(employee.getEmployeeDOJ());
-        return convertView;
-    }
-
-    private static class ViewHolder {
-        public TextView nameTextView;
-        public TextView ageTextView;
-        public TextView dobTextView;
-        public TextView dojTextView;
-    }
-
 
     public void cursorToArrayList() {
         while (mCursor.moveToNext()) {
@@ -146,7 +85,47 @@ public class EmployeeListAdapter extends BaseAdapter {
         };
     }
 
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final Context context = parent.getContext();
+        return new ViewHolder(context, LayoutInflater.from(context)
+                .inflate(R.layout.custom_row_layout, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        TextView nameTextView = holder.nameTextView;
+        TextView ageTextView = holder.ageTextView;
+        TextView dobTextView = holder.dobTextView;
+        TextView dojTextView = holder.dojTextView;
+        Employee employee =  mDataSource.get(position);
+        nameTextView.setText(employee.getEmployeeName());
+        ageTextView.setText(String.valueOf(employee.getEmployeeAge()));
+        dobTextView.setText(employee.getEmployeeDOB());
+        dojTextView.setText(employee.getEmployeeDOJ());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDataSource.size();
+    }
+
+    /**
+     * RecyclerView requires use of a ViewHolder for communications between itself and the app
+     */
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView nameTextView;
+        public TextView ageTextView;
+        public TextView dobTextView;
+        public TextView dojTextView;
+
+        public ViewHolder(final Context context, View itemView) {
+            super(itemView);
+            nameTextView = (TextView) itemView.findViewById(R.id.display_emp_name);
+            ageTextView = (TextView) itemView.findViewById(R.id.display_emp_age);
+            dobTextView = (TextView) itemView.findViewById(R.id.display_emp_dob);
+            dojTextView = (TextView) itemView.findViewById(R.id.display_emp_doj);
+        }
     }
 }
