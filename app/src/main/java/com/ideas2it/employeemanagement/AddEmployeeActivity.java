@@ -14,22 +14,21 @@ import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-
-import data.EmployeeContract;
-import data.EmployeeDBHelper;
+import models.Employee;
 
 
 import android.content.Context;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AddEmployeeActivity extends AppCompatActivity  {
 
-
-    private EmployeeDBHelper employeeDBHelper;
-    private SQLiteDatabase sqLiteDatabase;
     private static EditText dobTxt;
     private static EditText dojTxt;
+    private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +36,12 @@ public class AddEmployeeActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_add_employee);
         dobTxt = (EditText) findViewById(R.id.new_emp_dob);
         dojTxt = (EditText) findViewById(R.id.new_emp_doj);
+        mDatabase = FirebaseDatabase.getInstance().getReference("employees");
     }
 
 
     public void insert(View view) {
-        employeeDBHelper = new EmployeeDBHelper(getApplicationContext());
-        sqLiteDatabase = employeeDBHelper.getWritableDatabase();
+
         EditText editText = (EditText) findViewById(R.id.new_emp_name);
         String name = editText.getText().toString().trim();
         editText = (EditText) findViewById(R.id.new_emp_age);
@@ -56,17 +55,14 @@ public class AddEmployeeActivity extends AppCompatActivity  {
         editText = (EditText) findViewById(R.id.new_emp_doj);
         String doj = editText.getText().toString().trim();
 
-        ContentValues values = new ContentValues();
-        values.put(EmployeeContract.EmpEntry.COLUMN_NAME, name);
-        values.put(EmployeeContract.EmpEntry.COLUMN_AGE, age);
-        values.put(EmployeeContract.EmpEntry.COLUMN_SALARY, salary);
-        values.put(EmployeeContract.EmpEntry.COLUMN_DEPT, dept);
-        values.put(EmployeeContract.EmpEntry.COLUMN_DOB, dob);
-        values.put(EmployeeContract.EmpEntry.COLUMN_DOJ, doj);
+        String empId = mDatabase.push().getKey();
 
-        long newRowId = sqLiteDatabase.insert(EmployeeContract.EmpEntry.TABLE_NAME, null, values);
+        Employee employee = new Employee(empId, name, age, salary, dept, dob, doj);
+
+        mDatabase.child(empId).setValue(employee);
+
         Context context = getApplicationContext();
-        CharSequence text = String.format("Employee added with employee id %1$s", newRowId);
+        CharSequence text = String.format("Employee added with employee id %1$s", empId);
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
@@ -78,9 +74,6 @@ public class AddEmployeeActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        if(null!= employeeDBHelper){
-            employeeDBHelper.close();
-        }
         super.onDestroy();
     }
 

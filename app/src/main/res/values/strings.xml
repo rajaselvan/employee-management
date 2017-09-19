@@ -5,13 +5,5 @@
     <string name="action_sort_by_name">Sort by Name</string>
     <string name="action_sort_by_dob">Sort by DOB</string>
     <string name="action_sort_by_doj">Sort by DOJ</string>
-    <string-array name="team_array">
-        <item>PHP</item>
-        <item>Mobile</item>
-        <item>Data Science</item>
-        <item>Devero</item>
-        <item>IdeaMed</item>
-        <item>IdeaRX</item>
-    </string-array>
     <string name="title_activity_main">MainActivity</string>
 </resources>

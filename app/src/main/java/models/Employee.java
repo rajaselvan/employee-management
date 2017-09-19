@@ -3,12 +3,14 @@ package models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import static android.R.attr.id;
+
 public class Employee implements Parcelable {
 
-    private int id;
+    private String empId;
     private String employeeName;
-    private int employeeAge;
-    private int employeeSalary;
+    private String employeeAge;
+    private String employeeSalary;
     private String employeeDept;
     private String employeeDOB;
     private String employeeDOJ;
@@ -16,23 +18,33 @@ public class Employee implements Parcelable {
     public Employee() {
     }
 
-    public int getId() {
-        return id;
+    public Employee(String empId, String employeeName, String employeeAge, String employeeSalary, String employeeDept, String employeeDOB, String employeeDOJ) {
+        this.empId = empId;
+        this.employeeName = employeeName;
+        this.employeeAge = employeeAge;
+        this.employeeSalary = employeeSalary;
+        this.employeeDept = employeeDept;
+        this.employeeDOB = employeeDOB;
+        this.employeeDOJ = employeeDOJ;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getId() {
+        return empId;
+    }
+
+    public void setId(String empId) {
+        this.empId = empId;
     }
 
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
 
-    public void setEmployeeAge(int employeeAge) {
+    public void setEmployeeAge(String employeeAge) {
         this.employeeAge = employeeAge;
     }
 
-    public void setEmployeeSalary(int employeeSalary) {
+    public void setEmployeeSalary(String employeeSalary) {
         this.employeeSalary = employeeSalary;
     }
 
@@ -52,11 +64,11 @@ public class Employee implements Parcelable {
         return employeeName;
     }
 
-    public int getEmployeeAge() {
+    public String getEmployeeAge() {
         return employeeAge;
     }
 
-    public int getEmployeeSalary() {
+    public String getEmployeeSalary() {
         return employeeSalary;
     }
 
@@ -78,10 +90,10 @@ public class Employee implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(id);
+        out.writeString(empId);
         out.writeString(employeeName);
-        out.writeInt(employeeAge);
-        out.writeInt(employeeSalary);
+        out.writeString(employeeAge);
+        out.writeString(employeeSalary);
         out.writeString(employeeDept);
         out.writeString(employeeDOB);
         out.writeString(employeeDOJ);
@@ -99,10 +111,10 @@ public class Employee implements Parcelable {
     };
 
     public Employee(Parcel in) {
-        id = in.readInt();
+        empId = in.readString();
         employeeName = in.readString();
-        employeeAge = in.readInt();
-        employeeSalary = in.readInt();
+        employeeAge = in.readString();
+        employeeSalary = in.readString();
         employeeDept = in.readString();
         employeeDOB = in.readString();
         employeeDOJ = in.readString();

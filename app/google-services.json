@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "773547902767",
+    "firebase_url": "https://employee-management-fb36f.firebaseio.com",
+    "project_id": "employee-management-fb36f",
+    "storage_bucket": "employee-management-fb36f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773547902767:android:f1cf310f21a12184",
+        "android_client_info": {
+          "package_name": "com.ideas2it.employeemanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773547902767-u5699u7u6tk8ja80p8kvi1imulkmasvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfVAHl_oI-3d0eb_ewXMdKUZpwWKqO5Mc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

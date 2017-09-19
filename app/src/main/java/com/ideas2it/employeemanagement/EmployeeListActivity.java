@@ -2,8 +2,6 @@ package com.ideas2it.employeemanagement;
 
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,13 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import adapters.EmployeeListAdapter;
-import data.EmployeeContract;
-import data.EmployeeDBHelper;
 import listeners.RecyclerItemClickListener;
 import models.Employee;
 
@@ -30,14 +33,13 @@ import models.Employee;
 public class EmployeeListActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
         SearchView.OnCloseListener{
-    private EmployeeDBHelper employeeDBHelper;
+
     private EmployeeListAdapter employeeListAdapter;
-    private SQLiteDatabase sqLiteDatabase;
-    private Cursor employeesCursor;
     private SearchView mSearchView;
-    private List<Employee> employeesList;
+    private List<Employee> employeesList = new ArrayList<Employee>();
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
+    private DatabaseReference mDatabase;
 
 
     @Override
@@ -50,13 +52,50 @@ public class EmployeeListActivity extends AppCompatActivity implements
         mLayoutManager.setAutoMeasureEnabled(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mDatabase = FirebaseDatabase.getInstance().getReference("employees");
     }
-
 
     @Override
     protected void onResume(){
         super.onResume();
-        retrieve();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                employeesList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Employee employee = postSnapshot.getValue(Employee.class);
+                    employeesList.add(employee);
+                }
+                employeeListAdapter = new EmployeeListAdapter(getApplicationContext(), employeesList);
+                mRecyclerView.setAdapter(employeeListAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Employee selectedEmployee = employeesList.get(position);
+                        Employee employee = new Employee();
+                        employee.setId(selectedEmployee.getId());
+                        employee.setEmployeeName(selectedEmployee.getEmployeeName());
+                        employee.setEmployeeAge(selectedEmployee.getEmployeeAge());
+                        employee.setEmployeeSalary(selectedEmployee.getEmployeeSalary());
+                        employee.setEmployeeDept(selectedEmployee.getEmployeeDept());
+                        employee.setEmployeeDOB(selectedEmployee.getEmployeeDOB());
+                        employee.setEmployeeDOJ(selectedEmployee.getEmployeeDOJ());
+                        Intent detailIntent = new Intent(getApplicationContext(), EmployeeDetailsActivity.class);
+                        detailIntent.putExtra("employee", employee);
+                        startActivity(detailIntent);
+                    }
+
+                })
+        );
     }
 
 
@@ -111,36 +150,6 @@ public class EmployeeListActivity extends AppCompatActivity implements
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public void retrieve(){
-        employeeDBHelper = new EmployeeDBHelper(getApplicationContext());
-        sqLiteDatabase = employeeDBHelper.getReadableDatabase();
-        employeesCursor = sqLiteDatabase.rawQuery("SELECT  * FROM "+ EmployeeContract.EmpEntry.TABLE_NAME, null);
-        employeeListAdapter= new EmployeeListAdapter(this, employeesCursor);
-        employeesList = employeeListAdapter.fetchAll();
-        mRecyclerView.setAdapter(employeeListAdapter);
-        mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Employee selectedEmployee = (Employee) employeesList.get(position);
-                        Employee employee = new Employee();
-                        employee.setId(selectedEmployee.getId());
-                        employee.setEmployeeName(selectedEmployee.getEmployeeName());
-                        employee.setEmployeeAge(selectedEmployee.getEmployeeAge());
-                        employee.setEmployeeSalary(selectedEmployee.getEmployeeSalary());
-                        employee.setEmployeeDept(selectedEmployee.getEmployeeDept());
-                        employee.setEmployeeDOB(selectedEmployee.getEmployeeDOB());
-                        employee.setEmployeeDOJ(selectedEmployee.getEmployeeDOJ());
-                        Intent detailIntent = new Intent(getApplicationContext(), EmployeeDetailsActivity.class);
-                        detailIntent.putExtra("employee", employee);
-                        startActivity(detailIntent);
-                    }
-
-                })
-        );
     }
 
 

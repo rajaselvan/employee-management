@@ -22,9 +22,9 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.display_emp_name);
         textView.setText(employee.getEmployeeName());
         textView = (TextView) findViewById(R.id.display_emp_age);
-        textView.setText(String.valueOf(employee.getEmployeeAge()));
+        textView.setText(employee.getEmployeeAge());
         textView = (TextView) findViewById(R.id.display_emp_salary);
-        textView.setText(String.valueOf(employee.getEmployeeSalary()));
+        textView.setText(employee.getEmployeeSalary());
         textView = (TextView) findViewById(R.id.display_emp_dept);
         textView.setText(employee.getEmployeeDept());
         textView = (TextView) findViewById(R.id.display_emp_dob);
